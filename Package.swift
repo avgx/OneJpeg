@@ -1,26 +1,37 @@
-// swift-tools-version: 6.2
-// The swift-tools-version declares the minimum version of Swift required to build this package.
+// swift-tools-version: 6.1
 
 import PackageDescription
 
 let package = Package(
     name: "OneJpeg",
+    defaultLocalization: "en",
+    platforms: [
+        .iOS(.v15),
+        .macOS(.v13),
+        .tvOS(.v17),
+        .visionOS(.v1),
+    ],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
-        .library(
-            name: "OneJpeg",
-            targets: ["OneJpeg"]
-        ),
+        .library(name: "OneJpeg", targets: ["OneJpeg"]),
+    ],
+    dependencies: [
+        .package(url: "https://github.com/avgx/OneWireFormat", from: "1.0.0"),
+        .package(url: "https://github.com/avgx/RequestResponse", from: "2.0.0"),
     ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "OneJpeg"
+            name: "OneJpeg",
+            dependencies: [
+                .product(name: "OneWireFormat", package: "OneWireFormat"),
+                .product(name: "RequestResponse", package: "RequestResponse"),
+            ]
         ),
         .testTarget(
             name: "OneJpegTests",
-            dependencies: ["OneJpeg"]
+            dependencies: ["OneJpeg"],
+            resources: [
+                .process("Resources"),
+            ]
         ),
     ]
 )
